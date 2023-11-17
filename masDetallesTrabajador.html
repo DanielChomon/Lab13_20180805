@@ -8,20 +8,25 @@
     <title>Lista Acumulada</title>
     <script>
         $(document).ready(function () {
-            $("#obtenerLista").ready(function () {
+            let url = new URLSearchParams(window.location.search);
+            let dni = url.get('dni');
+            if (dni == null) {
+                window.location.href = "Inicio.html";
+            } else {
                 $.ajax({
                     method: "GET",
                     dataType: "json",
                     crossDomain: true,
-                    url: "http://127.0.0.1:3000/sedes"
+                    url: "http://127.0.0.1:3000/trabajadores/ventas/" + dni
                 }).done(function (data) {
                     var lista = data;
                     var contentHtml = "";
-                    $.each(lista, function (i, sedes) {
+                    $.each(lista, function (i, ventas) {
                         contentHtml += "<tr>";
-                        contentHtml += "<td>" + sedes.nombreSede + "</td>";
-                        contentHtml += "<td>" + sedes.direccion + "</td>";
-                        contentHtml += "<td><a class='btn btn-success' href=" + (sedes.idsede) + "'masDetallesSede.html?id='>Detalles</a></td>";
+                        contentHtml += "<td>" + ventas.inventario.nombre "</td>";
+                        contentHtml += "<td>" + ventas.inventario.numeroserie + "</td>";
+                        contentHtml += "<td>" + ventas.inventario.marca.nombre + "</td>";
+                        contentHtml += "<td>" + ventas.fecha + "</td>";
                         contentHtml += "</tr>";
                     });
                     $("table tbody").html(contentHtml);
@@ -39,17 +44,26 @@
     <div class="container mx-auto"  style="">
         <img src="logo.jpeg" alt="Bicicentro Gtics Logo" style="max-width: 30%; height: auto;">
         <h1 class="mb-3">Bicicentro Gtics</h1>
-        <h2 class="mb-3">Lista Sedes</h2>
-        <a href="Inicio.html" class="btn btn-danger" >Regresar</a>
+        <h2 class="mb-3">Detalles del trabajador</h2>
+        <a href="Trabajadores.html" class="btn btn-danger" >Regresar a lista de trabajadores</a>
 
+        <h4 class="mb-3">Dni:</h4>
+        <h4 class="mb-3">Nombres:</h4>
+        <h4 class="mb-3">Apellidos:</h4>
+        <h4 class="mb-3">Correo:</h4>
+        <h4 class="mb-3">Sede:</h4>
+
+
+        <h3 class="mb-3">Ventas</h3>
         <hr />
         <table class="table">
             <thead>
             <tr>
                 <th>#</th>
-                <th>Nombre</th>
-                <th>Direccion</th>
-                <th>Ver detalles</th>
+                <th>Nombre del Producto</th>
+                <th>Numero de Serie</th>
+                <th>Marca</th>
+                <th>Fecha</th>
             </tr>
             </thead>
             <tbody>
